@@ -1,0 +1,9 @@
+name: DeathTP
+version: ${project.version}
+main: me.ryvador.deathtp.DeathTP
+api-version: 1.16
+authors: [ RyVador ]
+description: Gives a player their coordinates where they died and gives them the option to TP to them
+commands:
+  deathtp:
+    description: Teleports a player to the location they died
