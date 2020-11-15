@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
@@ -40,8 +41,11 @@ public final class DeathTP extends JavaPlugin implements Listener {
         System.out.println("-------------------");
 
     }
+    
 
     public Map<Player, Location> playersDeathLocation = new HashMap<>();
+
+    public static boolean tpAllowed;
 
     @EventHandler
     public void onDeath(PlayerDeathEvent e){
@@ -53,6 +57,7 @@ public final class DeathTP extends JavaPlugin implements Listener {
         message.setBold(true);
         message.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/deathtp"));
         player.spigot().sendMessage(message);
+        tpAllowed = true;
 
     }
 
@@ -64,7 +69,12 @@ public final class DeathTP extends JavaPlugin implements Listener {
 
                 Player player = (Player) sender;
                 Location loc = playersDeathLocation.getOrDefault(player, null);
-                if (loc != null) player.teleport(loc);
+                if (tpAllowed){
+                    if (loc != null) player.teleport(loc);
+                    tpAllowed = false;
+                } else {
+                    player.sendMessage(ChatColor.RED + "You have already used this command once from when you died!");
+                }
 
 
                 return true;
