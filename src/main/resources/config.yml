@@ -1,0 +1,11 @@
+time-limit-enabled: True
+#In seconds
+time-limit-time: 600
+#Time limit makes the /deathtp command only accessible in the first 10 minutes from when the player dies.
+#After that the command will not work and you can't teleport back to your items
+
+#This message will appear if the time limit is up
+time-limit-message: '&cIt has been more than 10 minutes since you have died!'
+
+#This message will appear if the players try's doing the /deathtp twice from when they died
+already-teleported: '&cYou have already used this command once from when you died!'
