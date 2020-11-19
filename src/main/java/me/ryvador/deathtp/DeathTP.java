@@ -1,7 +1,6 @@
 package me.ryvador.deathtp;
 
 
-import com.sun.istack.internal.NotNull;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -31,6 +30,7 @@ public final class DeathTP extends JavaPlugin implements Listener {
         getServer().getPluginManager().registerEvents(this, this);
         this.getConfig().options().copyDefaults();
         this.saveDefaultConfig();
+
 
     }
 
@@ -86,7 +86,7 @@ public final class DeathTP extends JavaPlugin implements Listener {
 
                         } else {
                             player.sendMessage(ChatColor.translateAlternateColorCodes('&',
-                                    this.getConfig().getString("time-limit-message")));
+                                    this.getConfig().getString( "time-limit-message")));
                         }
                     }
                 } else {
@@ -101,23 +101,18 @@ public final class DeathTP extends JavaPlugin implements Listener {
                 System.out.println("[DeathTP] Console cannot run this command!");
             }
 
-        } if(command.getName().equals("deathtp reload")){
-            if (!sender.hasPermission("deathtp.reload")) {
-                sender.sendMessage(ChatColor.RED + "You don't have the deathtp.reload permission node!");
-                return true;
-            } else {
+        } else if (command.getName().equals("deathtpreload")){
+            
+            if (sender.hasPermission("deathtp.reload")){
                 this.reloadConfig();
-                sender.sendMessage(ChatColor.RED +  "Config has been reloaded!");
+                sender.sendMessage(ChatColor.GREEN + "The config file has been reloaded!");
+
+            } else {
+                sender.sendMessage(ChatColor.RED + "You do not have the deathtp.reload permission!");
             }
-            return true;
-
-
         }
 
-
-
-
-
+        
 
         return true;
     }

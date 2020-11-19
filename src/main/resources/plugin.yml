@@ -7,5 +7,5 @@ description: Gives a player their coordinates where they died and gives them the
 commands:
   deathtp:
     description: Teleports a player to the location they died
-  deathtp reload:
-    description: Reloads the config file if the user has the deathtp.reload permission
+  deathtpreload:
+    description: Reloads the config files
