@@ -9,3 +9,5 @@ commands:
     description: Teleports a player to the location they died
   deathtpreload:
     description: Reloads the config files
+  deathtpdisable:
+    description: Disables the plugin

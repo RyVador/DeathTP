@@ -1,3 +1,6 @@
+#Determines if the plugin is enabled or not
+enabled: true
+
 time-limit-enabled: True
 #In seconds
 time-limit-time: 600
@@ -9,3 +12,8 @@ time-limit-message: '&cIt has been more than 10 minutes since you have died!'
 
 #This message will appear if the players try's doing the /deathtp twice from when they died
 already-teleported: '&cYou have already used this command once from when you died!'
+
+#This message will be displayed when a player tries to use the /deathtp command when the plugin is disabled
+disabled-message: '&cDeathTP has been disable by your administrator!'
+
+

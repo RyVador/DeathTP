@@ -52,19 +52,23 @@ public final class DeathTP extends JavaPlugin implements Listener {
 
     public static boolean tpAllowed;
 
+    public static boolean isEnabled;
+
     @EventHandler
     public void onDeath(PlayerDeathEvent e){
         Player player = e.getEntity();
         Location deathLocation = player.getLocation();
-        playersDeathLocation.put(player, deathLocation);
-        TextComponent message = new TextComponent("Click me to teleport back to your death location!");
-        message.setColor(ChatColor.GOLD);
-        message.setBold(true);
-        message.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/deathtp"));
-        player.spigot().sendMessage(message);
-        tpAllowed = true;
-        if (this.getConfig().getBoolean("time-limit-enabled")) {
-            cooldowns.put(player.getName(), System.currentTimeMillis() + (this.getConfig().getInt("time-limit-time") * 1000));
+        if (this.getConfig().getBoolean("enabled")){
+            playersDeathLocation.put(player, deathLocation);
+            TextComponent message = new TextComponent("Click me to teleport back to your death location!");
+            message.setColor(ChatColor.GOLD);
+            message.setBold(true);
+            message.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/deathtp"));
+            player.spigot().sendMessage(message);
+            tpAllowed = true;
+            if (this.getConfig().getBoolean("time-limit-enabled")) {
+                cooldowns.put(player.getName(), System.currentTimeMillis() + (this.getConfig().getInt("time-limit-time") * 1000));
+            }
         }
 
 
@@ -72,26 +76,31 @@ public final class DeathTP extends JavaPlugin implements Listener {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if(command.getName().equals("deathtp")){
+        if(command.getName().equalsIgnoreCase("deathtp")){
 
             if (sender instanceof Player){
 
                 Player player = (Player) sender;
                 Location loc = playersDeathLocation.getOrDefault(player, null);
-                if (tpAllowed){
-                    if (cooldowns.containsKey(player.getName())) {
-                        if (cooldowns.get(player.getName()) > System.currentTimeMillis()) {
-                            if (loc != null) player.teleport(loc);
-                            tpAllowed = false;
+                if (this.getConfig().getBoolean("enabled")){
+                    if (tpAllowed){
+                        if (cooldowns.containsKey(player.getName())) {
+                            if (cooldowns.get(player.getName()) > System.currentTimeMillis()) {
+                                if (loc != null) player.teleport(loc);
+                                tpAllowed = false;
 
-                        } else {
-                            player.sendMessage(ChatColor.translateAlternateColorCodes('&',
-                                    this.getConfig().getString( "time-limit-message")));
+                            } else {
+                                player.sendMessage(ChatColor.translateAlternateColorCodes('&',
+                                        this.getConfig().getString( "time-limit-message")));
+                            }
                         }
+                    } else {
+                        player.sendMessage(ChatColor.translateAlternateColorCodes('&',
+                                this.getConfig().getString("already-teleported")));
                     }
                 } else {
-                    player.sendMessage(ChatColor.translateAlternateColorCodes('&',
-                            this.getConfig().getString("already-teleported")));
+                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&',
+                            this.getConfig().getString("disabled-message")));
                 }
 
 
@@ -101,7 +110,7 @@ public final class DeathTP extends JavaPlugin implements Listener {
                 System.out.println("[DeathTP] Console cannot run this command!");
             }
 
-        } else if (command.getName().equals("deathtpreload")){
+        } else if (command.getName().equalsIgnoreCase("deathtpreload")){
             
             if (sender.hasPermission("deathtp.reload")){
                 this.reloadConfig();
@@ -110,6 +119,9 @@ public final class DeathTP extends JavaPlugin implements Listener {
             } else {
                 sender.sendMessage(ChatColor.RED + "You do not have the deathtp.reload permission!");
             }
+        } else if (command.getName().equalsIgnoreCase("deathtpdisable")){
+            sender.sendMessage(ChatColor.RED + "The plugin has been disabled! To re-enable it, go to the config.yml!");
+            this.getConfig().set("enabled", false);
         }
 
         
