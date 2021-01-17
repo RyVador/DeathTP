@@ -6,7 +6,7 @@
 
     <groupId>me.RyVador</groupId>
     <artifactId>DeathTP</artifactId>
-    <version>1.4-SNAPSHOT</version>
+    <version>1.5-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>DeathTP</name>
